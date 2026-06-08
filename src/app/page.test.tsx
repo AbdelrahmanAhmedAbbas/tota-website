@@ -32,7 +32,7 @@ describe("Tota apology slideshow", () => {
     render(<Home />);
 
     expect(screen.queryByText(/ده عهدي ليكي/i)).not.toBeInTheDocument();
-    expect(screen.queryByTitle("أغنية النهاية لتوتا")).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "شغّلي الأغنية تاني" })).not.toBeInTheDocument();
 
     await goToApologyQuestion(user);
     expect(screen.getByText(/تقبلي اعتذاري؟/i)).toBeInTheDocument();
@@ -44,10 +44,8 @@ describe("Tota apology slideshow", () => {
     await user.click(screen.getByRole("button", { name: "أيوه، بحبك" }));
     expect(screen.getByText(/ده عهدي ليكي/i)).toBeInTheDocument();
     expect(screen.getByText(/مش هسيبك تشيلي لوحدك تاني/i)).toBeInTheDocument();
-    expect(screen.getByTitle("أغنية النهاية لتوتا")).toHaveAttribute(
-      "src",
-      expect.stringContaining("youtube.com/embed/qb4XgqJ4fkI")
-    );
+    expect(screen.getByTitle("أغنية النهاية لتوتا")).toHaveAttribute("src", "/finale.mp3");
+    expect(screen.getByRole("button", { name: "شغّلي الأغنية تاني" })).toBeInTheDocument();
   });
 
   it("keeps the no button inside mobile-safe bounds and changes its text", async () => {

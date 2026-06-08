@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 
 const content = {
   name: "توتا",
@@ -85,9 +85,7 @@ const noPositions = [
 ];
 
 const totalFrames = slides.length + 2;
-const finaleSongUrl =
-  "https://www.youtube.com/embed/qb4XgqJ4fkI?autoplay=1&playsinline=1&rel=0&modestbranding=1";
-const finaleSongWatchUrl = "https://www.youtube.com/watch?v=qb4XgqJ4fkI";
+const finaleSongSrc = "/finale.mp3";
 
 type Stage = "slides" | "love" | "finale";
 type SlideDirection = "next" | "back";
@@ -210,7 +208,18 @@ export default function Home() {
   const [stage, setStage] = useState<Stage>("slides");
   const [direction, setDirection] = useState<SlideDirection>("next");
   const [touchStart, setTouchStart] = useState<number | null>(null);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
   const year = useMemo(() => new Date().getFullYear(), []);
+
+  function playFinaleSong() {
+    const audio = audioRef.current;
+    if (!audio) return;
+    audio.currentTime = 0;
+    const attempt = audio.play();
+    if (attempt && typeof attempt.catch === "function") {
+      attempt.catch(() => {});
+    }
+  }
   const activeSlide = slides[slideIndex];
   const frameIndex =
     stage === "finale" ? totalFrames - 1 : stage === "love" ? slides.length : slideIndex;
@@ -251,6 +260,7 @@ export default function Home() {
 
   return (
     <main data-testid="tota-journey" dir="rtl" className="slideshow-stage">
+      <audio ref={audioRef} src={finaleSongSrc} preload="auto" title="أغنية النهاية لتوتا" />
       <div className="slideshow-frame">
         <header className="slideshow-topbar">
           <span>عرض خاص</span>
@@ -318,25 +328,25 @@ export default function Home() {
             counter={slides.length + 1}
             question={content.questions.love}
             yesLabel="أيوه، بحبك"
-            onYes={() => setStage("finale")}
+            onYes={() => {
+              playFinaleSong();
+              setStage("finale");
+            }}
           />
         )}
 
         {stage === "finale" && (
           <section key="finale" className="slide-shell slide-next finale-shell">
             <FloatingMarks />
-            <div className="music-badge">
-              <span>الأغنية بتحاول تبدأ</span>
-              <a href={finaleSongWatchUrl} target="_blank" rel="noreferrer">
-                لو مشتغلتش
-              </a>
-              <iframe
-                title="أغنية النهاية لتوتا"
-                src={finaleSongUrl}
-                allow="autoplay; encrypted-media; picture-in-picture"
-                referrerPolicy="strict-origin-when-cross-origin"
-              />
-            </div>
+            <button
+              type="button"
+              className="music-badge"
+              onClick={playFinaleSong}
+              aria-label="شغّلي الأغنية تاني"
+            >
+              <span>الأغنية بتلعب</span>
+              <span className="music-badge__hint">اضغطي لو وقفت</span>
+            </button>
             <div className="slide-meta">
               <span>النهاية اللي بتمناها</span>
               <span data-testid="slide-counter">
