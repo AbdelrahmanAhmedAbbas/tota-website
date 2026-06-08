@@ -456,6 +456,55 @@ button {
   width: 4.5rem;
 }
 
+.music-badge {
+  align-items: center;
+  background: rgba(255, 250, 241, 0.82);
+  border: 1px solid rgba(192, 24, 74, 0.28);
+  border-radius: 999px;
+  box-shadow: 0 10px 22px rgba(72, 42, 28, 0.1);
+  color: var(--blush);
+  display: flex;
+  flex-wrap: wrap;
+  font-size: 0.68rem;
+  font-weight: 900;
+  gap: 0.38rem;
+  inset-block-start: 6.4rem;
+  inset-inline-start: auto;
+  left: 1rem;
+  max-width: 9.4rem;
+  padding: 0.34rem 0.64rem;
+  pointer-events: auto;
+  position: absolute;
+  transform: rotate(-5deg);
+  z-index: 3;
+}
+
+.music-badge::before {
+  content: "♪";
+  font-size: 0.9rem;
+}
+
+.music-badge a {
+  color: var(--ink);
+  text-decoration: underline;
+  text-underline-offset: 0.18rem;
+}
+
+.music-badge iframe {
+  block-size: 1px;
+  border: 0;
+  inline-size: 1px;
+  opacity: 0.01;
+  position: absolute;
+  pointer-events: none;
+}
+
+.finale-shell .music-badge {
+  left: 1rem;
+  right: auto;
+  top: 6.65rem;
+}
+
 .final-love-note {
   background: var(--ink);
   border-radius: 10px 28px 10px 28px;

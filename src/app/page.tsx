@@ -71,6 +71,9 @@ const noPositions = [
 ];
 
 const totalFrames = slides.length + 2;
+const finaleSongUrl =
+  "https://www.youtube.com/embed/qb4XgqJ4fkI?autoplay=1&playsinline=1&rel=0&modestbranding=1";
+const finaleSongWatchUrl = "https://www.youtube.com/watch?v=qb4XgqJ4fkI";
 
 type Stage = "slides" | "love" | "finale";
 type SlideDirection = "next" | "back";
@@ -279,6 +282,18 @@ export default function Home() {
         {stage === "finale" && (
           <section key="finale" className="slide-shell slide-next finale-shell">
             <FloatingMarks />
+            <div className="music-badge">
+              <span>الأغنية بتحاول تبدأ</span>
+              <a href={finaleSongWatchUrl} target="_blank" rel="noreferrer">
+                لو مشتغلتش
+              </a>
+              <iframe
+                title="أغنية النهاية لتوتا"
+                src={finaleSongUrl}
+                allow="autoplay; encrypted-media; picture-in-picture"
+                referrerPolicy="strict-origin-when-cross-origin"
+              />
+            </div>
             <div className="slide-meta">
               <span>النهاية اللي بتمناها</span>
               <span data-testid="slide-counter">
