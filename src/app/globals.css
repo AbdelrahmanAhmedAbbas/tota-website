@@ -1,13 +1,16 @@
 @import "tailwindcss";
 
 :root {
-  --background: #f8f0e6;
+  --background: #faf1e4;
   --foreground: #1d1714;
   --ink: #1d1714;
   --soft-ink: #5f5049;
   --paper: #fffaf1;
   --blush: #c0184a;
+  --blush-soft: #e7849f;
   --clay: #b96942;
+  --honey: #f4c26b;
+  --mint: #a7c4a0;
   --line: rgba(29, 23, 20, 0.14);
   --shadow: rgba(72, 42, 28, 0.18);
 }
@@ -143,6 +146,24 @@ button {
   font-size: 0.72rem;
   font-weight: 900;
   padding: 0.18rem 0.58rem;
+  position: relative;
+}
+
+.slide-stickers span::before {
+  background: linear-gradient(
+    180deg,
+    rgba(244, 194, 107, 0.78) 0%,
+    rgba(244, 194, 107, 0.55) 100%
+  );
+  border-radius: 1px;
+  box-shadow: 0 2px 4px rgba(72, 42, 28, 0.12);
+  content: "";
+  height: 0.36rem;
+  inset-block-start: -0.18rem;
+  inset-inline-start: 28%;
+  position: absolute;
+  transform: rotate(-6deg);
+  width: 1.05rem;
 }
 
 .slide-stickers span:nth-child(2) {
@@ -150,6 +171,16 @@ button {
   border-color: rgba(29, 23, 20, 0.22);
   color: #fffaf1;
   transform: translateY(0.85rem) rotate(13deg);
+}
+
+.slide-stickers span:nth-child(2)::before {
+  background: linear-gradient(
+    180deg,
+    rgba(231, 132, 159, 0.85) 0%,
+    rgba(231, 132, 159, 0.55) 100%
+  );
+  inset-inline-start: 38%;
+  transform: rotate(8deg);
 }
 
 .slide-next {
@@ -253,12 +284,42 @@ button {
 
 .slide-copy h1 {
   font-size: clamp(4.5rem, 24vw, 7rem);
+  position: relative;
   text-shadow: 0.045em 0.045em 0 rgba(185, 105, 66, 0.18);
+}
+
+.slide-copy h1::after {
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 220 14' fill='none' stroke='%23c0184a' stroke-width='3' stroke-linecap='round'><path d='M4 10 C 40 2, 80 14, 116 6 S 180 12, 216 4'/></svg>");
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  block-size: 0.55rem;
+  content: "";
+  inset-block-end: 0.1rem;
+  inset-inline-start: -0.4rem;
+  opacity: 0.78;
+  pointer-events: none;
+  position: absolute;
+  width: 78%;
 }
 
 .slide-copy h2 {
   font-size: clamp(2.55rem, 13.5vw, 4.45rem);
   max-width: 9ch;
+  position: relative;
+}
+
+.slide-copy h2::after {
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 12' fill='none' stroke='%23c0184a' stroke-width='2.5' stroke-linecap='round'><path d='M4 8 C 36 2, 72 12, 108 5 S 168 10, 196 4'/></svg>");
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  block-size: 0.42rem;
+  content: "";
+  inset-block-end: -0.05rem;
+  inset-inline-start: -0.2rem;
+  opacity: 0.7;
+  pointer-events: none;
+  position: absolute;
+  width: 6.5ch;
 }
 
 .slide-copy p {
@@ -287,6 +348,156 @@ button {
   padding-block-start: 0.9rem;
   position: relative;
   z-index: 1;
+}
+
+.invitation-shell {
+  background:
+    radial-gradient(circle at 88% 14%, rgba(244, 194, 107, 0.22), transparent 40%),
+    radial-gradient(circle at 8% 88%, rgba(167, 196, 160, 0.22), transparent 38%),
+    linear-gradient(135deg, rgba(255, 252, 246, 0.98), rgba(255, 240, 222, 0.92));
+}
+
+.invitation-shell::before {
+  background:
+    radial-gradient(circle at 22% 24%, rgba(192, 24, 74, 0.08) 0 0.22rem, transparent 0.26rem),
+    radial-gradient(circle at 78% 84%, rgba(185, 105, 66, 0.1) 0 0.18rem, transparent 0.22rem),
+    radial-gradient(circle at 88% 30%, rgba(244, 194, 107, 0.16) 0 0.26rem, transparent 0.3rem),
+    repeating-linear-gradient(
+      -7deg,
+      rgba(29, 23, 20, 0.038) 0 1px,
+      transparent 1px 12px
+    );
+  opacity: 0.7;
+}
+
+.invitation-shell::after {
+  background: var(--mint);
+  border-radius: 999px;
+  content: "";
+  height: 0.34rem;
+  inset-block-start: auto;
+  inset-block-end: 1.2rem;
+  inset-inline-end: -0.28rem;
+  position: absolute;
+  width: 4rem;
+}
+
+.invite-stamp {
+  align-items: center;
+  background:
+    radial-gradient(circle at 30% 28%, rgba(255, 255, 255, 0.55), transparent 40%),
+    rgba(255, 250, 241, 0.94);
+  border: 2px dashed rgba(192, 24, 74, 0.5);
+  border-radius: 50%;
+  box-shadow:
+    0 10px 22px rgba(72, 42, 28, 0.14),
+    inset 0 0 0 4px rgba(255, 250, 241, 0.88),
+    inset 0 0 0 5px rgba(192, 24, 74, 0.18);
+  color: var(--blush);
+  display: flex;
+  flex-direction: column;
+  font-weight: 900;
+  gap: 0.05rem;
+  height: 5.4rem;
+  inset-block-start: 1.1rem;
+  inset-inline-end: 0.95rem;
+  justify-content: center;
+  letter-spacing: 0.01em;
+  line-height: 1;
+  padding: 0.35rem;
+  position: absolute;
+  text-align: center;
+  transform: rotate(-11deg);
+  width: 5.4rem;
+  z-index: 2;
+}
+
+.invite-stamp__top,
+.invite-stamp__bottom {
+  font-size: 0.5rem;
+  opacity: 0.78;
+  text-transform: uppercase;
+}
+
+.invite-stamp__big {
+  color: var(--ink);
+  font-size: 1.1rem;
+  letter-spacing: 0.02em;
+}
+
+.invite-stamp__bottom {
+  font-size: 0.46rem;
+  max-width: 90%;
+}
+
+.invite-rsvp {
+  align-items: center;
+  animation: text-rise 620ms 280ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  background:
+    linear-gradient(135deg, rgba(255, 250, 241, 0.94), rgba(255, 238, 220, 0.88));
+  border: 1px solid rgba(192, 24, 74, 0.22);
+  border-radius: 14px 26px 14px 26px;
+  box-shadow:
+    0 10px 22px rgba(72, 42, 28, 0.12),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.7);
+  color: var(--ink);
+  display: inline-flex;
+  font-weight: 900;
+  gap: 0.5rem;
+  margin-block-start: 1.1rem;
+  padding: 0.42rem 0.85rem;
+  transform: rotate(-1.2deg);
+}
+
+.invite-rsvp__chip {
+  background: var(--ink);
+  border-radius: 999px;
+  color: #fffaf1;
+  font-size: 0.66rem;
+  padding: 0.16rem 0.5rem;
+}
+
+.invite-rsvp__arrow {
+  color: var(--blush);
+  font-size: 1rem;
+}
+
+.invite-rsvp__name {
+  color: var(--blush);
+  font-size: 0.88rem;
+  position: relative;
+}
+
+.invitation-shell .slide-copy {
+  padding-block: clamp(1.4rem, 6vh, 2.6rem) clamp(0.6rem, 2vh, 1rem);
+}
+
+.invitation-shell .slide-copy h2 {
+  font-size: clamp(2.1rem, 11vw, 3.4rem);
+  max-width: 10ch;
+}
+
+.invitation-shell .slide-copy h2::after {
+  width: 5.5ch;
+}
+
+.invitation-shell .slide-copy p:not(.slide-kicker) {
+  font-size: clamp(0.96rem, 4.2vw, 1.12rem);
+  line-height: 1.92;
+  margin-block-start: 1rem;
+}
+
+.invite-rsvp__name::after {
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 80 8' fill='none' stroke='%23c0184a' stroke-width='2' stroke-linecap='round'><path d='M3 6 C 18 1, 38 8, 58 3 S 74 6, 77 4'/></svg>");
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  block-size: 0.32rem;
+  content: "";
+  inset-block-end: -0.18rem;
+  inset-inline-start: 0;
+  opacity: 0.8;
+  position: absolute;
+  width: 100%;
 }
 
 .question-shell {
@@ -591,10 +802,32 @@ button {
   position: absolute;
 }
 
+.floating-words::before,
+.floating-words::after {
+  background:
+    radial-gradient(circle, rgba(192, 24, 74, 0.85) 0 2.2px, transparent 2.6px) 8% 18% / 110px 110px,
+    radial-gradient(circle, rgba(244, 194, 107, 0.95) 0 2.4px, transparent 2.8px) 78% 12% / 130px 130px,
+    radial-gradient(circle, rgba(167, 196, 160, 0.9) 0 2px, transparent 2.4px) 22% 78% / 120px 120px,
+    radial-gradient(circle, rgba(231, 132, 159, 0.9) 0 2.6px, transparent 3px) 88% 62% / 150px 150px;
+  background-repeat: repeat;
+  content: "";
+  inset: 0;
+  opacity: 0.55;
+  position: absolute;
+  animation: confetti-drift 9s ease-in-out infinite alternate;
+}
+
+.floating-words::after {
+  background-position: 30% 8%, 64% 36%, 12% 64%, 90% 88%;
+  animation-delay: -4s;
+  animation-duration: 11s;
+  opacity: 0.45;
+}
+
 .floating-words span {
   animation: float-word 4.8s ease-in-out infinite;
   animation-delay: var(--delay);
-  background: rgba(255, 250, 241, 0.75);
+  background: rgba(255, 250, 241, 0.78);
   border: 1px solid rgba(192, 24, 74, 0.26);
   border-radius: 999px;
   bottom: -10%;
@@ -605,6 +838,11 @@ button {
   inset-inline-start: var(--start);
   padding: 0.2rem 0.68rem;
   position: absolute;
+}
+
+.floating-words span:nth-child(odd)::before {
+  content: "♡ ";
+  color: var(--blush-soft);
 }
 
 .slideshow-controls {
@@ -747,6 +985,16 @@ button {
   to {
     opacity: 1;
     transform: translate3d(1.5%, 1%, 0);
+  }
+}
+
+@keyframes confetti-drift {
+  from {
+    transform: translate3d(-1.2%, -0.6%, 0) rotate(-2deg);
+  }
+
+  to {
+    transform: translate3d(1.2%, 0.6%, 0) rotate(2deg);
   }
 }
 

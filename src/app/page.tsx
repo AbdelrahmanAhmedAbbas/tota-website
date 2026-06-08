@@ -48,12 +48,12 @@ const slides = [
     note: "وجودك بيخليني أحس إن الدنيا لسه فيها أمان.",
   },
   {
-    kicker: "ذكرى نرجعلها",
-    icon: "☕",
-    mood: "خروجة وذكريات",
-    title: "خروجة لينا إحنا بس.",
-    body: "نفسي نخرج أنا وإنتي وبراء بس. ونفتكر أول مرة خرجنا بعبيدة، واتمرمطنا واحتسنا وإحنا بنرضعه لأول مرة بره البيت.",
-    note: "عايز نضحك على المرار القديم، ونرجع بذكرى ألطف.",
+    kicker: "اقتراح بسيط",
+    icon: "🥪",
+    mood: "خليها النهاردة؟",
+    title: "نتغدى برّة؟",
+    body: "فاكرة أول مرة طلعنا بعبيدة؟ لسه فاكر الموقف، اتمرمطنا واحنا بنرضعه لأول مرة بره البيت، وضحكنا بعدها على نفسنا وعدّيناها. نفسي نعيدها النهاردة بشكل أحلى، نطلع كلنا مع بعض، أنا وإنتي وعبيدة وبراء، ونتغدى على مهلنا. نضحك تاني، ونرجع بصورة جديدة نحطها جنب القديمة.",
+    note: "مفيش تجهيز ولا تخطيط. كلمة منك، وأنا بفصّل اليوم على كده.",
   },
   {
     kicker: "قبل النهاية",
@@ -70,9 +70,11 @@ const stickerPairs = [
   ["حقك", "واضحة"],
   ["شايفك", "بجد"],
   ["أمان", "قريبة"],
-  ["خروجة", "نضحك"],
+  ["خروجة", "النهاردة"],
   ["استعدي", "سؤال"],
 ] as const;
+
+const invitationSlideIndex = 4;
 
 const noPositions = [
   { x: 50, y: 72 },
@@ -258,7 +260,9 @@ export default function Home() {
         {stage === "slides" && slideIndex < slides.length - 1 && (
           <section
             key={slideIndex}
-            className={`slide-shell slide-${direction}`}
+            className={`slide-shell slide-${direction}${
+              slideIndex === invitationSlideIndex ? " invitation-shell" : ""
+            }`}
             onTouchStart={(event) => setTouchStart(event.changedTouches[0].clientX)}
             onTouchEnd={(event) => handleTouchEnd(event.changedTouches[0].clientX)}
           >
@@ -267,6 +271,13 @@ export default function Home() {
                 <span key={sticker}>{sticker}</span>
               ))}
             </div>
+            {slideIndex === invitationSlideIndex && (
+              <div className="invite-stamp" aria-hidden="true">
+                <span className="invite-stamp__top">دعوة عيلية</span>
+                <span className="invite-stamp__big">اليوم</span>
+                <span className="invite-stamp__bottom">٤ كراسي · ضحكة كتير</span>
+              </div>
+            )}
             <div className="slide-meta">
               <span>{activeSlide.kicker}</span>
               <span data-testid="slide-counter">
@@ -278,6 +289,13 @@ export default function Home() {
               <MoodBadge icon={activeSlide.icon} label={activeSlide.mood} />
               {slideIndex === 0 ? <h1>{activeSlide.title}</h1> : <h2>{activeSlide.title}</h2>}
               <p>{activeSlide.body}</p>
+              {slideIndex === invitationSlideIndex && (
+                <div className="invite-rsvp" aria-hidden="true">
+                  <span className="invite-rsvp__chip">ميعاد مفتوح</span>
+                  <span className="invite-rsvp__arrow">←</span>
+                  <span className="invite-rsvp__name">يا توتا</span>
+                </div>
+              )}
             </div>
 
             <p className="slide-note">{activeSlide.note}</p>
