@@ -210,6 +210,40 @@ button {
   z-index: 1;
 }
 
+.mood-badge {
+  align-items: center;
+  animation: soft-pop 540ms 220ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  background:
+    radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.78), transparent 34%),
+    rgba(255, 250, 241, 0.82);
+  border: 1px solid rgba(192, 24, 74, 0.2);
+  border-radius: 999px;
+  box-shadow: 0 10px 24px rgba(72, 42, 28, 0.11);
+  color: var(--blush);
+  display: inline-flex;
+  font-size: 0.78rem;
+  font-weight: 900;
+  gap: 0.42rem;
+  line-height: 1.4;
+  margin-block-end: 0.95rem;
+  max-width: 100%;
+  padding: 0.34rem 0.72rem 0.34rem 0.46rem;
+  transform-origin: center;
+}
+
+.mood-icon {
+  align-items: center;
+  background: rgba(29, 23, 20, 0.9);
+  border-radius: 999px;
+  box-shadow: inset 0 0 0 1px rgba(255, 250, 241, 0.24);
+  display: inline-flex;
+  font-size: 0.95rem;
+  height: 1.75rem;
+  justify-content: center;
+  line-height: 1;
+  width: 1.75rem;
+}
+
 .slide-copy h1,
 .slide-copy h2 {
   color: var(--ink);
@@ -261,6 +295,18 @@ button {
     linear-gradient(135deg, rgba(255, 252, 246, 0.98), rgba(255, 241, 229, 0.92));
 }
 
+.question-shell::before {
+  background:
+    radial-gradient(circle at 18% 28%, rgba(192, 24, 74, 0.12) 0 0.24rem, transparent 0.28rem),
+    radial-gradient(circle at 72% 78%, rgba(185, 105, 66, 0.14) 0 0.18rem, transparent 0.22rem),
+    repeating-linear-gradient(
+      -7deg,
+      rgba(29, 23, 20, 0.045) 0 1px,
+      transparent 1px 12px
+    );
+  opacity: 0.64;
+}
+
 .question-doodle {
   border: 1px solid rgba(192, 24, 74, 0.36);
   border-radius: 999px;
@@ -288,32 +334,45 @@ button {
 .answer-arena {
   animation: arena-rise 520ms 180ms cubic-bezier(0.22, 1, 0.36, 1) both;
   background:
-    linear-gradient(90deg, rgba(29, 23, 20, 0.04) 1px, transparent 1px),
-    linear-gradient(180deg, rgba(29, 23, 20, 0.035) 1px, transparent 1px),
-    rgba(255, 250, 241, 0.78);
-  background-size: 20px 20px;
-  border: 1px dashed rgba(29, 23, 20, 0.22);
-  border-radius: 14px 30px 14px 30px;
-  box-shadow: inset 0 1px 18px rgba(72, 42, 28, 0.08);
-  min-height: 174px;
+    radial-gradient(circle at 16% 22%, rgba(192, 24, 74, 0.12), transparent 30%),
+    linear-gradient(135deg, rgba(255, 250, 241, 0.96), rgba(255, 238, 224, 0.88));
+  border: 1px solid rgba(29, 23, 20, 0.12);
+  border-radius: 18px 34px 18px 34px;
+  box-shadow:
+    0 16px 32px rgba(72, 42, 28, 0.12),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.65);
+  min-height: 154px;
   overflow: hidden;
-  padding: 1rem;
+  padding: 0.9rem;
   position: relative;
   z-index: 1;
 }
 
 .answer-arena::before {
-  border: 1px solid rgba(192, 24, 74, 0.22);
+  background: rgba(255, 250, 241, 0.72);
+  border: 1px solid rgba(192, 24, 74, 0.2);
   border-radius: 999px;
-  color: rgba(192, 24, 74, 0.76);
-  content: "اختاري نعم وخلاص";
-  font-size: 0.72rem;
+  color: rgba(192, 24, 74, 0.68);
+  content: "زر لا بيتهرب بشياكة";
+  font-size: 0.68rem;
   font-weight: 900;
-  inset-block-end: 0.78rem;
-  inset-inline-end: 0.9rem;
-  padding: 0.2rem 0.62rem;
+  inset-block-end: 0.72rem;
+  inset-inline-end: 0.78rem;
+  padding: 0.18rem 0.58rem;
   position: absolute;
   transform: rotate(4deg);
+}
+
+.answer-arena::after {
+  background:
+    linear-gradient(90deg, rgba(29, 23, 20, 0.04) 1px, transparent 1px),
+    linear-gradient(180deg, rgba(29, 23, 20, 0.035) 1px, transparent 1px);
+  background-size: 18px 18px;
+  content: "";
+  inset: 0.55rem;
+  opacity: 0.52;
+  pointer-events: none;
+  position: absolute;
 }
 
 .yes-button,
@@ -332,13 +391,14 @@ button {
 
 .yes-button {
   background: var(--ink);
-  overflow: hidden;
   box-shadow: 0 12px 24px rgba(29, 23, 20, 0.22);
   color: #fffaf1;
-  padding: 0.78rem 1.35rem;
+  display: block;
+  inline-size: 100%;
+  overflow: hidden;
+  padding: 0.82rem 1.35rem;
   position: relative;
-  width: 100%;
-  z-index: 2;
+  z-index: 3;
 }
 
 .yes-button::after,
@@ -368,13 +428,13 @@ button {
     #fffaf1;
   border: 1px solid rgba(192, 24, 74, 0.45);
   box-shadow:
-    0 9px 0 rgba(192, 24, 74, 0.16),
-    0 14px 24px rgba(72, 42, 28, 0.16);
+    0 7px 0 rgba(192, 24, 74, 0.14),
+    0 12px 22px rgba(72, 42, 28, 0.16);
   color: var(--blush);
-  font-size: 0.9rem;
+  font-size: 0.86rem;
   overflow: visible;
-  padding: 0.62rem 1rem;
-  z-index: 1;
+  padding: 0.58rem 0.92rem;
+  z-index: 4;
 }
 
 .no-button::before {
@@ -388,13 +448,18 @@ button {
 }
 
 .no-button::after {
-  border-block-start: 2px dashed rgba(192, 24, 74, 0.34);
-  content: "";
-  inline-size: 2.15rem;
-  inset-block-start: 50%;
-  inset-inline-end: calc(100% + 0.25rem);
+  background: rgba(29, 23, 20, 0.88);
+  border: 1px solid rgba(255, 250, 241, 0.48);
+  border-radius: 999px;
+  color: #fffaf1;
+  content: "اهربي؟";
+  font-size: 0.62rem;
+  font-weight: 900;
+  inset-block-start: -0.9rem;
+  inset-inline-start: -0.35rem;
+  padding: 0.08rem 0.34rem;
   position: absolute;
-  transform: translateY(-50%);
+  transform: rotate(-10deg);
 }
 
 .yes-button:active,
@@ -643,6 +708,18 @@ button {
   to {
     opacity: 1;
     transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes soft-pop {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.94) rotate(2deg);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1) rotate(-1deg);
   }
 }
 

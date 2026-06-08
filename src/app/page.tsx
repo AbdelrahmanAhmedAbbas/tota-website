@@ -17,36 +17,48 @@ const content = {
 const slides = [
   {
     kicker: "عرض خاص لتوتا",
+    icon: "🫶",
+    mood: "مش عارف أبدأ منين",
     title: "توتا",
     body: "أنا عارف إن صفحة صغيرة مش هتصلح كل حاجة. بس قلت أعملك حاجة بإيدي، حتى لو بسيطة، عشان الكلام اللي جوايا يوصل بدل ما يفضل متكركب.",
     note: "اقري براحتك. مفيش زرار تخطي، معلش.",
   },
   {
     kicker: "اعتذار واضح",
+    icon: "🙏",
+    mood: "حقك عليّا",
     title: "أنا قصّرت.",
     body: "وقت تعبك كان المفروض أكون ضهرك أكتر من كده. أنا مدعمتكيش بالشكل اللي تستحقيه، وتصرفي الغلط ضايقك ووجعك.",
     note: "مش داخل أشرح، داخل أقول: حقك عليّا.",
   },
   {
     kicker: "حقك عليّا",
+    icon: "🏠",
+    mood: "شايف تعب البيت",
     title: "أنا شايف تعبك.",
     body: "شايفك وإنتي واخدة بالك من البيت ومننا، بتلمي تفاصيل صغيرة محدش بياخد باله منها. مش مفرطة ومش مقصرة في حق أي حد فينا.",
     note: "الحاجات اللي بتعدي عادي عندنا، عارف إنها ساعات بتتعبك جدًا.",
   },
   {
     kicker: "اللي بينا",
+    icon: "🧡",
+    mood: "إنتي أماني",
     title: "إنتي دايمًا واخدة بالك.",
     body: "عينك علينا، على تصرفاتنا، على نفسيتنا، وعلى علاقتنا. ساعات بتحسي بالحاجة قبل ما أنا أفهمها أصلًا، وده مش قليل.",
     note: "وجودك بيخليني أحس إن الدنيا لسه فيها أمان.",
   },
   {
     kicker: "ذكرى نرجعلها",
+    icon: "☕",
+    mood: "خروجة وذكريات",
     title: "خروجة لينا إحنا بس.",
     body: "نفسي نخرج أنا وإنتي وبراء بس. ونفتكر أول مرة خرجنا بعبيدة، واتمرمطنا واحتسنا وإحنا بنرضعه لأول مرة بره البيت.",
     note: "عايز نضحك على المرار القديم، ونرجع بذكرى ألطف.",
   },
   {
     kicker: "قبل النهاية",
+    icon: "💌",
+    mood: "قلبي مستني",
     title: "فاضل سؤالين.",
     body: "مش هضغط عليكي. بس بصراحة أنا عامل الصفحة كلها ومستني إجابة تطمن قلبي شوية.",
     note: "وزر لا؟ ده واضح إنه مش قد المسؤولية.",
@@ -63,11 +75,11 @@ const stickerPairs = [
 ] as const;
 
 const noPositions = [
-  { x: 12, y: 66 },
-  { x: 52, y: 18 },
-  { x: 8, y: 18 },
-  { x: 45, y: 70 },
-  { x: 28, y: 42 },
+  { x: 50, y: 72 },
+  { x: 32, y: 75 },
+  { x: 68, y: 74 },
+  { x: 40, y: 76 },
+  { x: 60, y: 73 },
 ];
 
 const totalFrames = slides.length + 2;
@@ -112,6 +124,17 @@ function SlideDots({ activeIndex }: { activeIndex: number }) {
   );
 }
 
+function MoodBadge({ icon, label }: { icon: string; label: string }) {
+  return (
+    <div className="mood-badge" aria-label={label}>
+      <span className="mood-icon" aria-hidden="true">
+        {icon}
+      </span>
+      <span>{label}</span>
+    </div>
+  );
+}
+
 function QuestionSlide({
   counter,
   question,
@@ -149,6 +172,7 @@ function QuestionSlide({
       </div>
 
       <div className="slide-copy question-copy">
+        <MoodBadge icon="🥺" label="سؤال محتاج قلب طيب" />
         <p className="slide-kicker">بهدوء خالص</p>
         <h2>{question}</h2>
         <p>أنا عارف الإجابة اللي نفسي أسمعها. والإجابة التانية موجودة، بس عاملة فيها مشغولة شوية.</p>
@@ -165,10 +189,10 @@ function QuestionSlide({
           onClick={moveNoButton}
           style={{
             position: "absolute",
-            insetInlineStart: `${position.x}%`,
+            left: `${position.x}%`,
             top: `${position.y}%`,
-            transform: `translateY(-50%) rotate(${tilt}deg)`,
-            maxWidth: "72%",
+            transform: `translate(-50%, -50%) rotate(${tilt}deg)`,
+            maxWidth: "56%",
             whiteSpace: "nowrap",
           }}
         >
@@ -251,6 +275,7 @@ export default function Home() {
             </div>
 
             <div className="slide-copy">
+              <MoodBadge icon={activeSlide.icon} label={activeSlide.mood} />
               {slideIndex === 0 ? <h1>{activeSlide.title}</h1> : <h2>{activeSlide.title}</h2>}
               <p>{activeSlide.body}</p>
             </div>
@@ -301,6 +326,7 @@ export default function Home() {
               </span>
             </div>
             <div className="slide-copy">
+              <MoodBadge icon="❤️" label="وعد من قلبي" />
               <p className="slide-kicker">بعد أحلى أيوتين</p>
               <h2>{content.pledgeTitle}</h2>
               <p>{content.pledge}</p>
