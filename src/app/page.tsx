@@ -1,110 +1,61 @@
 "use client";
 
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useState, type CSSProperties } from "react";
 
-const content = {
-  name: "توتا",
-  questions: {
-    apology: "تقبلي اعتذاري؟",
-    love: "لسه بتحبيني؟",
-  },
-  runawayLabels: ["لا؟ استني بس", "مش بالسهولة دي", "نعم مستنياكي", "طب فرصة أخيرة"],
-  pledgeTitle: "ده عهدي ليكي",
-  pledge:
-    "بوعدك إن اللي جاي مش هيبقى نسخة من اللي فات. هنتعلم نحافظ على نفسيتنا وطاقتنا، ومش هسيبك تشيلي لوحدك تاني. كل يوم هحاول أبقى أهدى، وأوعى، وأحن عليكي وليكي. إنتي سندي وحبيبتي، ومليش في الدنيا أغلى منك.",
-};
-
-const slides = [
+const repairPoints = [
   {
-    kicker: "عرض خاص لتوتا",
-    icon: "🫶",
-    mood: "مش عارف أبدأ منين",
-    title: "توتا",
-    body: "أنا عارف إن صفحة صغيرة مش هتصلح كل حاجة. بس قلت أعملك حاجة بإيدي، حتى لو بسيطة، عشان الكلام اللي جوايا يوصل بدل ما يفضل متكركب.",
-    note: "اقري براحتك. مفيش زرار تخطي، معلش.",
+    label: "اللي كان لازم يحصل",
+    title: "كان لازم أتكلم معاكي أوضح",
+    body: "امبارح كان يوم تقيل علينا، وأنا كان دوري أكون حاضر معاكي بالكلام والهدوء قبل أي حاجة تانية.",
   },
   {
-    kicker: "اعتذار واضح",
-    icon: "🙏",
-    mood: "حقك عليّا",
-    title: "أنا قصّرت.",
-    body: "وقت تعبك كان المفروض أكون ضهرك أكتر من كده. أنا مدعمتكيش بالشكل اللي تستحقيه، وتصرفي الغلط ضايقك ووجعك.",
-    note: "مش داخل أشرح، داخل أقول: حقك عليّا.",
+    label: "اللي عملته غلط",
+    title: "كنت بجري أصلّح كل حاجة",
+    body: "دخلت في وضع الشغل والحلول، وبقيت أحاول أرتّب اليوم من غير ما أقف أسمعك الأول أو أفهم إحساسك.",
   },
   {
-    kicker: "حقك عليّا",
-    icon: "🏠",
-    mood: "شايف تعب البيت",
-    title: "أنا شايف تعبك.",
-    body: "شايفك وإنتي واخدة بالك من البيت ومننا، بتلمي تفاصيل صغيرة محدش بياخد باله منها. مش مفرطة ومش مقصرة في حق أي حد فينا.",
-    note: "الحاجات اللي بتعدي عادي عندنا، عارف إنها ساعات بتتعبك جدًا.",
-  },
-  {
-    kicker: "اللي بينا",
-    icon: "🧡",
-    mood: "إنتي أماني",
-    title: "إنتي دايمًا واخدة بالك.",
-    body: "عينك علينا، على تصرفاتنا، على نفسيتنا، وعلى علاقتنا. ساعات بتحسي بالحاجة قبل ما أنا أفهمها أصلًا، وده مش قليل.",
-    note: "وجودك بيخليني أحس إن الدنيا لسه فيها أمان.",
-  },
-  {
-    kicker: "اقتراح بسيط",
-    icon: "🥪",
-    mood: "خليها النهاردة؟",
-    title: "نتغدى برّة؟",
-    body: "فاكرة أول مرة طلعنا بعبيدة؟ لسه فاكر الموقف، اتمرمطنا واحنا بنرضعه لأول مرة بره البيت، وضحكنا بعدها على نفسنا وعدّيناها. نفسي نعيدها النهاردة بشكل أحلى، نطلع كلنا مع بعض، أنا وإنتي وعبيدة وبراء، ونتغدى على مهلنا. نضحك تاني، ونرجع بصورة جديدة نحطها جنب القديمة.",
-    note: "مفيش تجهيز ولا تخطيط. كلمة منك، وأنا بفصّل اليوم على كده.",
-  },
-  {
-    kicker: "قبل النهاية",
-    icon: "💌",
-    mood: "قلبي مستني",
-    title: "فاضل سؤالين.",
-    body: "مش هضغط عليكي. بس بصراحة أنا عامل الصفحة كلها ومستني إجابة تطمن قلبي شوية.",
-    note: "وزر لا؟ ده واضح إنه مش قد المسؤولية.",
+    label: "اللي وجعك",
+    title: "اتأخرت في السند",
+    body: "بدل ما أحسسك إننا فريق واحد، خليتك تحسي إنك بتواجهي اليوم لوحدك، وده حقك تزعلي منه.",
   },
 ] as const;
 
-const stickerPairs = [
-  ["مهم", "من قلبي"],
-  ["حقك", "واضحة"],
-  ["شايفك", "بجد"],
-  ["أمان", "قريبة"],
-  ["خروجة", "النهاردة"],
-  ["استعدي", "سؤال"],
+const promises = [
+  "هسأل قبل ما أصلّح",
+  "هسمع للآخر من غير دفاع",
+  "هقول تعبي من غير ما أجرحك",
+  "هفضل جنبك حتى وأنا مضغوط",
 ] as const;
 
-const invitationSlideIndex = 4;
+const soundCloudTrackUrl = "https://soundcloud.com/ocahhycucqfd/vzo6gyzcmgys";
 
-const noPositions = [
-  { x: 50, y: 72 },
-  { x: 32, y: 75 },
-  { x: 68, y: 74 },
-  { x: 40, y: 76 },
-  { x: 60, y: 73 },
-];
+function soundCloudPlayerUrl(autoPlay: boolean) {
+  const params = new URLSearchParams({
+    url: soundCloudTrackUrl,
+    color: "#ff4f86",
+    auto_play: autoPlay ? "true" : "false",
+    hide_related: "false",
+    show_comments: "false",
+    show_user: "true",
+    show_reposts: "false",
+    show_teaser: "true",
+    visual: "false",
+  });
 
-const totalFrames = slides.length + 2;
-const finaleSongSrc = "/finale.mp3";
-
-type Stage = "slides" | "love" | "finale";
-type SlideDirection = "next" | "back";
-
-function arabicNumber(value: number) {
-  return value.toLocaleString("ar-EG");
+  return `https://w.soundcloud.com/player/?${params.toString()}`;
 }
 
-function FloatingMarks() {
+function MotionScript() {
   return (
-    <div className="floating-words" aria-hidden="true">
-      {["حبي", "وعد", "نور", "حنية", "توتا"].map((word, index) => (
+    <div className="motion-script" aria-hidden="true">
+      {["آسف", "هسمعك", "معاكي", "أوضح", "أهدى"].map((word, index) => (
         <span
           key={word}
           style={
             {
-              "--delay": `${index * 0.42}s`,
-              "--start": `${8 + index * 18}%`,
-            } as React.CSSProperties
+              "--delay": `${index * 0.7}s`,
+              "--x": `${8 + index * 19}%`,
+            } as CSSProperties
           }
         >
           {word}
@@ -114,275 +65,141 @@ function FloatingMarks() {
   );
 }
 
-function SlideDots({ activeIndex }: { activeIndex: number }) {
+function MobileFunLayer() {
   return (
-    <div className="slide-dots" aria-hidden="true">
-      {Array.from({ length: totalFrames }).map((_, index) => (
-        <span key={index} className={index === activeIndex ? "active" : ""} />
-      ))}
-    </div>
-  );
-}
-
-function MoodBadge({ icon, label }: { icon: string; label: string }) {
-  return (
-    <div className="mood-badge" aria-label={label}>
-      <span className="mood-icon" aria-hidden="true">
-        {icon}
-      </span>
-      <span>{label}</span>
-    </div>
-  );
-}
-
-function QuestionSlide({
-  counter,
-  question,
-  yesLabel,
-  onYes,
-}: {
-  counter: number;
-  question: string;
-  yesLabel: string;
-  onYes: () => void;
-}) {
-  const [runawayCount, setRunawayCount] = useState(0);
-  const position = noPositions[runawayCount % noPositions.length];
-  const noLabel =
-    runawayCount === 0
-      ? "لا"
-      : content.runawayLabels[(runawayCount - 1) % content.runawayLabels.length];
-
-  function moveNoButton() {
-    setRunawayCount((count) => count + 1);
-  }
-
-  const tilt = runawayCount % 2 === 0 ? 4 : -7;
-
-  return (
-    <section className="slide-shell question-shell" aria-label="سؤال">
-      <div className="question-doodle" aria-hidden="true">
-        زر لا عامل فيها صعب
-      </div>
-      <div className="slide-meta">
-        <span>اختيار مهم</span>
-        <span data-testid="slide-counter">
-          {arabicNumber(counter)} / {arabicNumber(totalFrames)}
-        </span>
-      </div>
-
-      <div className="slide-copy question-copy">
-        <MoodBadge icon="🥺" label="سؤال محتاج قلب طيب" />
-        <p className="slide-kicker">بهدوء خالص</p>
-        <h2>{question}</h2>
-        <p>أنا عارف الإجابة اللي نفسي أسمعها. والإجابة التانية موجودة، بس عاملة فيها مشغولة شوية.</p>
-      </div>
-
-      <div className="answer-arena">
-        <button type="button" className="yes-button" onClick={onYes}>
-          {yesLabel}
-        </button>
-        <button
-          type="button"
-          data-runaway-count={runawayCount}
-          className="no-button"
-          onClick={moveNoButton}
-          style={{
-            position: "absolute",
-            left: `${position.x}%`,
-            top: `${position.y}%`,
-            transform: `translate(-50%, -50%) rotate(${tilt}deg)`,
-            maxWidth: "56%",
-            whiteSpace: "nowrap",
-          }}
+    <div className="mobile-fun-layer" data-testid="mobile-fun-layer" aria-hidden="true">
+      {["بحبك", "هسمعك", "ضحكة", "صلح"].map((word, index) => (
+        <span
+          className="fun-chip"
+          key={word}
+          style={
+            {
+              "--delay": `${index * 0.55}s`,
+              "--x": `${10 + index * 22}%`,
+              "--y": `${18 + (index % 2) * 46}%`,
+            } as CSSProperties
+          }
         >
-          {noLabel}
-        </button>
-      </div>
-    </section>
+          {word}
+        </span>
+      ))}
+      <i className="fun-shape fun-shape-one" />
+      <i className="fun-shape fun-shape-two" />
+      <i className="fun-shape fun-shape-three" />
+    </div>
   );
 }
 
 export default function Home() {
-  const [slideIndex, setSlideIndex] = useState(0);
-  const [stage, setStage] = useState<Stage>("slides");
-  const [direction, setDirection] = useState<SlideDirection>("next");
-  const [touchStart, setTouchStart] = useState<number | null>(null);
-  const audioRef = useRef<HTMLAudioElement | null>(null);
-  const year = useMemo(() => new Date().getFullYear(), []);
+  const [shouldAutoplaySong, setShouldAutoplaySong] = useState(false);
 
-  function playFinaleSong() {
-    const audio = audioRef.current;
-    if (!audio) return;
-    audio.currentTime = 0;
-    const attempt = audio.play();
-    if (attempt && typeof attempt.catch === "function") {
-      attempt.catch(() => {});
-    }
-  }
-  const activeSlide = slides[slideIndex];
-  const frameIndex =
-    stage === "finale" ? totalFrames - 1 : stage === "love" ? slides.length : slideIndex;
+  useEffect(() => {
+    const autoplayTimer = window.setTimeout(() => {
+      setShouldAutoplaySong(true);
+    }, 2000);
 
-  function goNext() {
-    setDirection("next");
-    setSlideIndex((current) => Math.min(current + 1, slides.length - 1));
-  }
+    return () => window.clearTimeout(autoplayTimer);
+  }, []);
 
-  function goBack() {
-    setDirection("back");
-    if (stage === "love") {
-      setStage("slides");
-      setSlideIndex(slides.length - 1);
-      return;
-    }
-
-    setSlideIndex((current) => Math.max(current - 1, 0));
-  }
-
-  function handleTouchEnd(clientX: number) {
-    if (touchStart === null || stage !== "slides") {
-      setTouchStart(null);
-      return;
-    }
-
-    const distance = clientX - touchStart;
-    if (distance > 54 && slideIndex < slides.length - 1) {
-      goNext();
-    }
-
-    if (distance < -54 && slideIndex > 0) {
-      goBack();
-    }
-
-    setTouchStart(null);
+  function playSong() {
+    setShouldAutoplaySong(true);
   }
 
   return (
-    <main data-testid="tota-journey" dir="rtl" className="slideshow-stage">
-      <audio ref={audioRef} src={finaleSongSrc} preload="auto" title="أغنية النهاية لتوتا" />
-      <div className="slideshow-frame">
-        <header className="slideshow-topbar">
-          <span>عرض خاص</span>
-          <span className="tabular-nums">{year}</span>
+    <main data-testid="repair-letter" dir="rtl" className="repair-page">
+      <MotionScript />
+      <MobileFunLayer />
+      <div className="light-beam" aria-hidden="true" />
+      <div className="repair-frame">
+        <header className="repair-hero" aria-labelledby="apology-title">
+          <p className="eyebrow">رسالة جديدة من قلبي</p>
+          <div className="hero-stickers" aria-hidden="true">
+            <span>بحبك</span>
+            <span>نبدأ بهدوء</span>
+            <span>هسمعك</span>
+          </div>
+          <h1 id="apology-title">أنا آسف يا توتا</h1>
+          <p className="hero-lede">
+            مش جاي أجمّل اللي حصل، ولا أشرح نفسي قبل ما أعتذر. جاي أقولك إنك كنتي
+            محتاجة مني حضور وكلام واضح وسند، وأنا قصّرت في التلاتة.
+          </p>
+          <div className="hero-actions">
+            <a className="hero-link" href="#promise">
+              اقري وعدي ليكي
+            </a>
+            <button type="button" className="music-control" onClick={playSong}>
+              <span aria-hidden="true">♪</span>
+              شغّلي من ساوندكلاود
+            </button>
+          </div>
+          <p className="song-status" aria-live="polite">
+            {shouldAutoplaySong
+              ? "لو الصوت ما بدأش، اضغطي زر التشغيل داخل ساوندكلاود"
+              : "دوسي عليها لما تبقي جاهزة تسمعيها"}
+          </p>
+          <iframe
+            className="soundcloud-player"
+            title="أغنية الاعتذار من ساوندكلاود"
+            src={soundCloudPlayerUrl(shouldAutoplaySong)}
+            allow="autoplay"
+            loading="lazy"
+          />
         </header>
 
-        {stage === "slides" && slideIndex < slides.length - 1 && (
-          <section
-            key={slideIndex}
-            className={`slide-shell slide-${direction}${
-              slideIndex === invitationSlideIndex ? " invitation-shell" : ""
-            }`}
-            onTouchStart={(event) => setTouchStart(event.changedTouches[0].clientX)}
-            onTouchEnd={(event) => handleTouchEnd(event.changedTouches[0].clientX)}
-          >
-            <div className="slide-stickers" aria-hidden="true">
-              {stickerPairs[slideIndex].map((sticker) => (
-                <span key={sticker}>{sticker}</span>
-              ))}
-            </div>
-            {slideIndex === invitationSlideIndex && (
-              <div className="invite-stamp" aria-hidden="true">
-                <span className="invite-stamp__top">دعوة عيلية</span>
-                <span className="invite-stamp__big">اليوم</span>
-                <span className="invite-stamp__bottom">٤ كراسي · ضحكة كتير</span>
-              </div>
-            )}
-            <div className="slide-meta">
-              <span>{activeSlide.kicker}</span>
-              <span data-testid="slide-counter">
-                {arabicNumber(slideIndex + 1)} / {arabicNumber(totalFrames)}
-              </span>
-            </div>
+        <section className="truth-section" aria-labelledby="truth-title">
+          <div className="section-label">امبارح</div>
+          <h2 id="truth-title">امبارح كان يوم تقيل علينا</h2>
+          <p>
+            أنا كنت غرقان في الشغل وبحاول ألحق وأصلّح وأظبط كل حاجة، بس وأنا بعمل
+            كده نسيت الأهم: إني أتكلم معاكي، أسمعك، وأسألك محتاجة مني إيه في
+            اللحظة دي. كان لازم أكون أوضح، أهدى، وأقرب.
+          </p>
+        </section>
 
-            <div className="slide-copy">
-              <MoodBadge icon={activeSlide.icon} label={activeSlide.mood} />
-              {slideIndex === 0 ? <h1>{activeSlide.title}</h1> : <h2>{activeSlide.title}</h2>}
-              <p>{activeSlide.body}</p>
-              {slideIndex === invitationSlideIndex && (
-                <div className="invite-rsvp" aria-hidden="true">
-                  <span className="invite-rsvp__chip">ميعاد مفتوح</span>
-                  <span className="invite-rsvp__arrow">←</span>
-                  <span className="invite-rsvp__name">يا توتا</span>
-                </div>
-              )}
-            </div>
-
-            <p className="slide-note">{activeSlide.note}</p>
-          </section>
-        )}
-
-        {stage === "slides" && slideIndex === slides.length - 1 && (
-          <QuestionSlide
-            key="apology-question"
-            counter={slideIndex + 1}
-            question={content.questions.apology}
-            yesLabel="أيوه، قبلت اعتذارك"
-            onYes={() => setStage("love")}
-          />
-        )}
-
-        {stage === "love" && (
-          <QuestionSlide
-            key="love-question"
-            counter={slides.length + 1}
-            question={content.questions.love}
-            yesLabel="أيوه، بحبك"
-            onYes={() => {
-              playFinaleSong();
-              setStage("finale");
-            }}
-          />
-        )}
-
-        {stage === "finale" && (
-          <section key="finale" className="slide-shell slide-next finale-shell">
-            <FloatingMarks />
-            <button
-              type="button"
-              className="music-badge"
-              onClick={playFinaleSong}
-              aria-label="شغّلي الأغنية تاني"
+        <section className="repair-grid" aria-label="تفاصيل الاعتذار">
+          {repairPoints.map((point, index) => (
+            <article
+              className="repair-point"
+              key={point.title}
+              style={{ "--index": index } as CSSProperties}
             >
-              <span>الأغنية بتلعب</span>
-              <span className="music-badge__hint">اضغطي لو وقفت</span>
-            </button>
-            <div className="slide-meta">
-              <span>النهاية اللي بتمناها</span>
-              <span data-testid="slide-counter">
-                {arabicNumber(totalFrames)} / {arabicNumber(totalFrames)}
-              </span>
-            </div>
-            <div className="slide-copy">
-              <MoodBadge icon="❤️" label="وعد من قلبي" />
-              <p className="slide-kicker">بعد أحلى أيوتين</p>
-              <h2>{content.pledgeTitle}</h2>
-              <p>{content.pledge}</p>
-            </div>
-            <p className="final-love-note">بحبك يا توتا، وعايز أستحق قلبك كل يوم.</p>
-          </section>
-        )}
+              <span>{point.label}</span>
+              <h3>{point.title}</h3>
+              <p>{point.body}</p>
+            </article>
+          ))}
+        </section>
 
-        <footer className="slideshow-controls">
-          <SlideDots activeIndex={frameIndex} />
-          <div className="control-buttons">
-            {stage !== "finale" && (
-              <button
-                type="button"
-                className="ghost-button"
-                onClick={goBack}
-                disabled={stage === "slides" && slideIndex === 0}
-              >
-                السابق
-              </button>
-            )}
-            {stage === "slides" && slideIndex < slides.length - 1 && (
-              <button type="button" className="next-button" onClick={goNext}>
-                التالي
-              </button>
-            )}
+        <section className="meaning-section" aria-labelledby="meaning-title">
+          <div className="meaning-card">
+            <p className="section-label">الجملة اللي محتاجة تتصلح</p>
+            <h2 id="meaning-title">لما قلتلك إني مش عندي طاقة أسندك</h2>
+            <p>
+              أنا آسف إن الجملة دي طلعت بالشكل ده. مش معناه إنك حمل عليّا، ولا إن
+              وجعك زيادة، ولا إنك المفروض تواجهي لوحدك.
+            </p>
+            <p className="meaning-emphasis">
+              المعنى الصح كان: أنا منهك ومتلخبط ومحتاج أهدى عشان أعرف أكون سندك
+              صح، بس كان لازم أقولها بحنية بدل ما أوجعك.
+            </p>
           </div>
-        </footer>
+        </section>
+
+        <section id="promise" className="promise-section" aria-labelledby="promise-title">
+          <p className="section-label">من النهارده</p>
+          <h2 id="promise-title">وعدي ليكي</h2>
+          <div className="promise-list">
+            {promises.map((promise, index) => (
+              <p key={promise} style={{ "--index": index } as CSSProperties}>
+                {promise}
+              </p>
+            ))}
+          </div>
+          <p className="closing-line">
+            بحبك، وعايز أرجّع بينا الكلام الهادي، وأثبتلك بالأيام مش بالكلام بس إنك
+            مش لوحدك.
+          </p>
+        </section>
       </div>
     </main>
   );

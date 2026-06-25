@@ -1,66 +1,91 @@
-import { render, screen } from "@testing-library/react";
+import { act, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import Home from "./page";
 
-describe("Tota apology slideshow", () => {
-  async function goToApologyQuestion(user: ReturnType<typeof userEvent.setup>) {
-    for (let index = 0; index < 5; index += 1) {
-      await user.click(screen.getByRole("button", { name: "التالي" }));
-    }
-  }
-
-  it("renders an Arabic RTL slideshow and advances one emotional slide at a time", async () => {
-    const user = userEvent.setup();
-
+describe("Tota repair letter", () => {
+  it("renders a new Arabic RTL apology experience with yesterday's core message", () => {
     render(<Home />);
 
-    expect(screen.getByTestId("tota-journey")).toHaveAttribute("dir", "rtl");
-    expect(screen.getByRole("heading", { name: /توتا/i })).toBeInTheDocument();
-    expect(screen.getByText(/عرض خاص لتوتا/i)).toBeInTheDocument();
-    expect(screen.getByTestId("slide-counter")).toHaveTextContent("١ / ٨");
+    expect(screen.getByTestId("repair-letter")).toHaveAttribute("dir", "rtl");
+    expect(
+      screen.getByRole("heading", { name: "أنا آسف يا توتا" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { name: "امبارح كان يوم تقيل علينا" }),
+    ).toBeInTheDocument();
+    expect(screen.getByText(/كان لازم أتكلم معاكي أوضح/i)).toBeInTheDocument();
+    expect(screen.getByText(/كنت بجري أصلّح كل حاجة/i)).toBeInTheDocument();
+  });
+
+  it("clarifies the energy sentence without blaming her", () => {
+    render(<Home />);
+
+    expect(screen.getByText(/لما قلتلك إني مش عندي طاقة أسندك/i)).toBeInTheDocument();
+    expect(screen.getByText(/مش معناه إنك حمل عليّا/i)).toBeInTheDocument();
+    expect(screen.getByText(/المعنى الصح كان: أنا منهك/i)).toBeInTheDocument();
+  });
+
+  it("replaces the old playful slideshow copy with a new final promise", () => {
+    render(<Home />);
+
+    expect(screen.queryByText(/عرض خاص لتوتا/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/زر لا/i)).not.toBeInTheDocument();
     expect(screen.queryByText(/تقبلي اعتذاري؟/i)).not.toBeInTheDocument();
-
-    await user.click(screen.getByRole("button", { name: "التالي" }));
-
-    expect(screen.getByTestId("slide-counter")).toHaveTextContent("٢ / ٨");
-    expect(screen.getByText(/أنا مدعمتكيش بالشكل اللي تستحقيه/i)).toBeInTheDocument();
+    expect(screen.getByText(/هسأل قبل ما أصلّح/i)).toBeInTheDocument();
+    expect(screen.getByText(/بحبك، وعايز أرجّع بينا الكلام الهادي/i)).toBeInTheDocument();
   });
 
-  it("reveals the final pledge only after the slideshow and both yes answers", async () => {
+  it("loads the requested SoundCloud song in a clickable player", async () => {
     const user = userEvent.setup();
 
     render(<Home />);
 
-    expect(screen.queryByText(/ده عهدي ليكي/i)).not.toBeInTheDocument();
-    expect(screen.queryByRole("button", { name: "شغّلي الأغنية تاني" })).not.toBeInTheDocument();
+    const player = screen.getByTitle("أغنية الاعتذار من ساوندكلاود");
+    const initialSrc = player.getAttribute("src") ?? "";
 
-    await goToApologyQuestion(user);
-    expect(screen.getByText(/تقبلي اعتذاري؟/i)).toBeInTheDocument();
+    expect(initialSrc).toContain("https://w.soundcloud.com/player/");
+    expect(decodeURIComponent(initialSrc)).toContain(
+      "https://soundcloud.com/ocahhycucqfd/vzo6gyzcmgys",
+    );
+    expect(initialSrc).toContain("auto_play=false");
 
-    await user.click(screen.getByRole("button", { name: "أيوه، قبلت اعتذارك" }));
-    expect(screen.getByText(/لسه بتحبيني؟/i)).toBeInTheDocument();
-    expect(screen.queryByText(/ده عهدي ليكي/i)).not.toBeInTheDocument();
+    await user.click(screen.getByRole("button", { name: "شغّلي من ساوندكلاود" }));
 
-    await user.click(screen.getByRole("button", { name: "أيوه، بحبك" }));
-    expect(screen.getByText(/ده عهدي ليكي/i)).toBeInTheDocument();
-    expect(screen.getByText(/مش هسيبك تشيلي لوحدك تاني/i)).toBeInTheDocument();
-    expect(screen.getByTitle("أغنية النهاية لتوتا")).toHaveAttribute("src", "/finale.mp3");
-    expect(screen.getByRole("button", { name: "شغّلي الأغنية تاني" })).toBeInTheDocument();
+    expect(screen.getByTitle("أغنية الاعتذار من ساوندكلاود")).toHaveAttribute(
+      "src",
+      expect.stringContaining("auto_play=true"),
+    );
+    expect(screen.getByText(/لو الصوت ما بدأش/i)).toBeInTheDocument();
   });
 
-  it("keeps the no button inside mobile-safe bounds and changes its text", async () => {
-    const user = userEvent.setup();
+  it("requests SoundCloud autoplay after two seconds by default", () => {
+    vi.useFakeTimers();
 
     render(<Home />);
 
-    await goToApologyQuestion(user);
-    const noButton = screen.getByRole("button", { name: "لا" });
-    await user.click(noButton);
+    expect(screen.getByTitle("أغنية الاعتذار من ساوندكلاود")).toHaveAttribute(
+      "src",
+      expect.stringContaining("auto_play=false"),
+    );
 
-    expect(noButton).toHaveTextContent(/لا؟ استني بس|مش بالسهولة دي|نعم مستنياكي/);
-    expect(noButton).toHaveStyle({
-      position: "absolute",
+    act(() => {
+      vi.advanceTimersByTime(2000);
     });
-    expect(noButton).toHaveAttribute("data-runaway-count", "1");
+
+    expect(screen.getByTitle("أغنية الاعتذار من ساوندكلاود")).toHaveAttribute(
+      "src",
+      expect.stringContaining("auto_play=true"),
+    );
+    expect(screen.getByText(/لو الصوت ما بدأش/i)).toBeInTheDocument();
+
+    vi.useRealTimers();
+  });
+
+  it("includes mobile-only playful decoration without changing the apology content", () => {
+    render(<Home />);
+
+    expect(screen.getByTestId("mobile-fun-layer")).toHaveAttribute("aria-hidden", "true");
+    expect(screen.getByText(/أنا آسف يا توتا/i)).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "شغّلي من ساوندكلاود" })).toBeInTheDocument();
   });
 });
