@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Cairo } from "next/font/google";
+import { Amiri, Cairo } from "next/font/google";
 import "./globals.css";
 
 const cairo = Cairo({
@@ -8,9 +8,16 @@ const cairo = Cairo({
   weight: ["400", "500", "600", "700", "800"],
 });
 
+const amiri = Amiri({
+  variable: "--font-display",
+  subsets: ["arabic", "latin"],
+  weight: ["400"],
+  display: "swap",
+});
+
 export const metadata: Metadata = {
-  title: "إلى توتا",
-  description: "رسالة اعتذار وحب لتوتا",
+  title: "إلى توتا، بكل الحب",
+  description: "رسالة شكر، ووعد من القلب. إلى توتا، يا حنية البيت.",
 };
 
 export default function RootLayout({
@@ -22,7 +29,7 @@ export default function RootLayout({
     <html
       lang="ar"
       dir="rtl"
-      className={`${cairo.variable} h-full antialiased`}
+      className={`${cairo.variable} ${amiri.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">{children}</body>
     </html>
